@@ -2,7 +2,8 @@
 
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
-import requests 
+import requests
+from functions import convert_number
 
 st.set_page_config(layout="wide")
 
@@ -29,7 +30,9 @@ col1,col2 = st.columns([2, 4])
 with col1:
     option = st.selectbox('Which Month',worksheet_names)
     data = conn.read(worksheet=option,usecols = list(range(15)))
-    data["Student's Phone Number"] = data["Student's Phone Number"].astype(str)
-
+    if "Student's Phone Number" in data.columns:
+        data["Student's Phone Number"] = data["Student's Phone Number"].apply(convert_number)
 with col2:
+    third_column = data.iloc[:, 2]
+    third_column= third_column.astype(str)
     st.dataframe(data)
