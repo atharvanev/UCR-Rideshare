@@ -15,6 +15,7 @@ response = requests.get(url)
 sheetdata = response.json()
 
 
+
 worksheet_names = [sheet["properties"]["title"] for sheet in sheetdata.get("sheets", [])]
 
 print(worksheet_names)
@@ -29,7 +30,7 @@ col1,col2 = st.columns([2, 4])
 
 with col1:
     option = st.selectbox('Which Month',worksheet_names)
-    data = conn.read(worksheet=option,usecols = list(range(15)))
+    data = conn.read(worksheet=option,usecols = list(range(15)),ttl=600)
     if "Student's Phone Number" in data.columns:
         data["Student's Phone Number"] = data["Student's Phone Number"].apply(convert_number)
 with col2:
